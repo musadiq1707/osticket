@@ -47,7 +47,7 @@ if ($_POST) {
 
 if ($_POST && isset($_POST['luser'])) {
     if (!$_POST['luser'])
-        $errors['err'] = __('Valid username or email address is required.');
+        $errors['err'] = __('Valid username or email address is required');
     elseif (($user = UserAuthenticationBackend::process(trim($_POST['luser']),
             substr($_POST['lpasswd'], 0, 128), $errors))) {
         if ($user instanceof ClientCreateRequest) {

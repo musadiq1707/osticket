@@ -34,29 +34,26 @@ if ($info['topicId'] && ($topic=Topic::lookup($info['topicId']))) {
 <h1><?php echo __('Open a New Ticket');?></h1>
 <p><?php echo __('Please fill in the form below to open a new ticket.');?></p>
 <form id="ticketForm" method="post" action="open.php" enctype="multipart/form-data">
-    <?php csrf_token(); ?>
-    <input type="hidden" name="a" value="open">
-    <table width="800" cellpadding="1" cellspacing="0" border="0">
-        <tbody>
-            <?php if (!$thisclient) {
-                $uform = UserForm::getUserForm()->getForm($_POST);
-                if ($_POST) $uform->isValid();
-                $uform->render(array('staff' => false, 'mode' => 'create'));
-            } else { ?>
-                <tr>
-                    <td colspan="2"><hr /></td>
-                </tr>
-                <tr>
-                    <td><?php echo __('Email'); ?>:</td>
-                    <td><?php echo $thisclient->getEmail(); ?></td>
-                </tr>
-                <tr>
-                    <td><?php echo __('Client'); ?>:</td>
-                    <td><?php echo Format::htmlchars($thisclient->getName()); ?></td>
-                </tr>
-            <?php } ?>
-        </tbody>
-        <tbody><tr><td colspan="2"><hr />
+  <?php csrf_token(); ?>
+  <input type="hidden" name="a" value="open">
+  <table width="800" cellpadding="1" cellspacing="0" border="0">
+    <tbody>
+<?php
+        if (!$thisclient) {
+            $uform = UserForm::getUserForm()->getForm($_POST);
+            if ($_POST) $uform->isValid();
+            $uform->render(array('staff' => false, 'mode' => 'create'));
+        }
+        else { ?>
+            <tr><td colspan="2"><hr /></td></tr>
+        <tr><td><?php echo __('Email'); ?>:</td><td><?php
+            echo $thisclient->getEmail(); ?></td></tr>
+        <tr><td><?php echo __('Client'); ?>:</td><td><?php
+            echo Format::htmlchars($thisclient->getName()); ?></td></tr>
+        <?php } ?>
+    </tbody>
+    <tbody>
+    <tr><td colspan="2"><hr />
         <div class="form-header" style="margin-bottom:0.5em">
         <b><?php echo __('Help Topic'); ?></b>
         </div>

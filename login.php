@@ -72,7 +72,7 @@ if ($_POST && isset($_POST['luser'])) {
              */
             $user_account = UserAccount::lookup(array('user_id' => $user->getId()));
 
-            if ($user_account->package_id == null) {
+            if ($user_account->subscription_id == null) {
                 Http::redirect($_SESSION['_client']['auth']['dest']
                     ?: 'subscription.php');
             } else {

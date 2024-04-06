@@ -19,23 +19,30 @@ $Id: $
 require 'secure.inc.php';
 
 require_once 'class.user.php';
+require_once 'config.php';
 
 $user = User::lookup($thisclient->getId());
 
 if ($user && $_POST) {
     $errors = array();
 
-    if (!isset($_POST['package'])) {
-        $errors['err'] = __('Please select package');
+    if (!isset($_POST['plan'])) {
+        $errors['err'] = __('Please select plan');
     } else {
+        $planId = $_POST['plan'];
 
+        $selectedPlan = null;
+        foreach ($plans as $key => $value) {
+            if ($value['id'] == $planId) {
+                $selectedPlan = $value;
+                break;
+            }
+        }
     }
 }
 
-require_once(CLIENTINC_DIR.'packages.inc.php');
 $inc = 'subscription.inc.php';
 
 include(CLIENTINC_DIR.'header.inc.php');
 include(CLIENTINC_DIR.$inc);
 include(CLIENTINC_DIR.'footer.inc.php');
-

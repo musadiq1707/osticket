@@ -5,8 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="85736465-7661-4019-8e75-80628b25d893" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/include/client/open.inc.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/client/open.inc.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/ost-config.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/ost-config.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/class.nav.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/class.nav.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/client/packages.inc.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/client/packages.inc.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/client/templates/sidebar.tmpl.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/client/templates/sidebar.tmpl.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/login.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -20,26 +22,30 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "musadiq1707"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;musadiq1707&quot;
   }
-}]]></component>
+}</component>
   <component name="GitToolBoxStore">
     <option name="projectConfigVersion" value="5" />
   </component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/musadiq1707/osticket.git",
-    "accountId": "1b5ccf2e-565e-4f85-a7cf-9848f09f26d7"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/musadiq1707/osticket.git&quot;,
+    &quot;accountId&quot;: &quot;1b5ccf2e-565e-4f85-a7cf-9848f09f26d7&quot;
   }
-}]]></component>
+}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/include/client/open.inc.php" root0="SKIP_INSPECTION" root1="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/tickets.php" root0="FORCE_HIGHLIGHTING" root1="SKIP_INSPECTION" />
+  </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="E:\laragon\bin\php\php-7.4.19-Win32-vc15-x64\php.exe" />
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 6
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectId" id="2eh77aSXNRRAXNVbbtSqa09WgId" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -49,6 +55,7 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
+    "last_opened_file_path": "E:/laragon-php8/www/osticket/include/client",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -57,6 +64,12 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\laragon-php8\www\osticket\include\client" />
+      <recent name="E:\laragon-php8\www\osticket" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>

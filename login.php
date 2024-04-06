@@ -66,8 +66,19 @@ if ($_POST && isset($_POST['luser'])) {
             }
         }
         else {
-            Http::redirect($_SESSION['_client']['auth']['dest']
-                ?: 'tickets.php');
+            /**
+             * Check Subscription Activated
+             *
+             */
+            $user_account = UserAccount::lookup(array('user_id' => $user->getId()));
+
+            if ($user_account->package_id == null) {
+                Http::redirect($_SESSION['_client']['auth']['dest']
+                    ?: 'subscription.php');
+            } else {
+                Http::redirect($_SESSION['_client']['auth']['dest']
+                    ?: 'tickets.php');
+            }
         }
     } elseif(!$errors['err']) {
         $errors['err'] = sprintf('%s - %s', __('Invalid username or password'), __('Please try again!'));

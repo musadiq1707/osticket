@@ -336,9 +336,8 @@ class UserNav {
             // registration is disabled and client login is required for new
             // tickets. In such a case, creating a ticket would not be
             // possible for web clients.
-            if ($cfg->getClientRegistrationMode() != 'disabled'
-                    || !$cfg->isClientLoginRequired())
-                $navs['new']=array('desc'=>__('Open a New Ticket'),'href'=>'open.php','title'=>'');
+            if ($cfg->getClientRegistrationMode() != 'disabled' || !$cfg->isClientLoginRequired())
+                //$navs['new']=array('desc'=>__('Open a New Ticket'),'href'=>'open.php','title'=>'');
             if($user && $user->isValid()) {
                 if(!$user->isGuest()) {
                     $navs['tickets']=array('desc'=>sprintf(__('Tickets (%d)'),$user->getNumTickets($user->canSeeOrgTickets())),

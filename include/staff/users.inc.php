@@ -155,14 +155,21 @@ else
     <thead>
         <tr>
             <th nowrap width="4%">&nbsp;</th>
-            <th><a <?php echo $name_sort; ?> href="users.php?<?php
-                echo $qstr; ?>&sort=name"><?php echo __('Name'); ?></a></th>
-            <th width="22%"><a  <?php echo $status_sort; ?> href="users.php?<?php
-                echo $qstr; ?>&sort=status"><?php echo __('Status'); ?></a></th>
-            <th width="20%"><a <?php echo $create_sort; ?> href="users.php?<?php
-                echo $qstr; ?>&sort=create"><?php echo __('Created'); ?></a></th>
-            <th width="20%"><a <?php echo $update_sort; ?> href="users.php?<?php
-                echo $qstr; ?>&sort=update"><?php echo __('Updated'); ?></a></th>
+            <th>
+                <a <?php echo $name_sort; ?> href="users.php?<?php echo $qstr; ?>&sort=name"><?php echo __('Name'); ?></a>
+            </th>
+            <th>
+                <?php echo __('Plan'); ?>
+            </th>
+            <th width="22%">
+                <a  <?php echo $status_sort; ?> href="users.php?<?php echo $qstr; ?>&sort=status"><?php echo __('Status'); ?></a>
+            </th>
+            <th width="20%">
+                <a <?php echo $create_sort; ?> href="users.php?<?php echo $qstr; ?>&sort=create"><?php echo __('Created'); ?></a>
+            </th>
+            <th width="20%">
+                <a <?php echo $update_sort; ?> href="users.php?<?php echo $qstr; ?>&sort=update"><?php echo __('Updated'); ?></a>
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -199,6 +206,24 @@ else
                     if ($U['ticket_count'])
                          echo sprintf('<i class="icon-fixed-width icon-file-text-alt"></i>
                              <small>(%d)</small>', $U['ticket_count']);
+                    ?>
+                </td>
+                <td>
+                    <?php
+                        $sql = 'SELECT subscription_id FROM ost_user_account WHERE user_id='.db_input($U['id']);
+                        if(!($res=db_query($sql)) || !db_num_rows($res)) {
+                            echo '--';
+                        } else {
+                            $ht = db_fetch_array($res);
+
+                            $sql1 = 'SELECT name FROM ost_plans WHERE id='.db_input($ht['subscription_id']);
+                            if(!($res1=db_query($sql1)) || !db_num_rows($res1)) {
+                                echo '--';
+                            } else {
+                                $ht1 = db_fetch_array($res1);
+                                echo $ht1['name'];
+                            }
+                        }
                     ?>
                 </td>
                 <td><?php echo $status; ?></td>

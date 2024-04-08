@@ -340,9 +340,17 @@ class UserNav {
                 //$navs['new']=array('desc'=>__('Open a New Ticket'),'href'=>'open.php','title'=>'');
             if($user && $user->isValid()) {
                 if(!$user->isGuest()) {
-                    $navs['tickets']=array('desc'=>sprintf(__('Tickets (%d)'),$user->getNumTickets($user->canSeeOrgTickets())),
-                                           'href'=>'tickets.php',
-                                            'title'=>__('Show all tickets'));
+                    if ($acct = $user->getAccount()) {
+                        $info = $acct->getInfo();
+
+                        if ($info['subscription_id'] == null) {
+                            $navs['status']=array('desc'=>__('Manage Your Membership'),'href'=>'subscription.php','title'=>'');
+                        } else {
+                            $navs['tickets']=array('desc'=>sprintf(__('Tickets (%d)'),$user->getNumTickets($user->canSeeOrgTickets())),
+                                'href'=>'tickets.php',
+                                'title'=>__('Show all tickets'));
+                        }
+                    }
                 } else {
                     $navs['tickets']=array('desc'=>__('View Ticket Thread'),
                                            'href'=>sprintf('tickets.php?id=%d',$user->getTicketId()),

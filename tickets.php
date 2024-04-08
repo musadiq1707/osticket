@@ -17,6 +17,15 @@
 require('secure.inc.php');
 if(!is_object($thisclient) || !$thisclient->isValid()) die('Access denied'); //Double check again.
 
+if ($acct = $thisclient->getAccount()) {
+    $info = $acct->getInfo();
+
+    if ($info['subscription_id'] == null) {
+        $errors['err']=__('Unknown or invalid ticket ID.');
+        Http::redirect('subscription.php');
+    }
+}
+
 if ($thisclient->isGuest())
     $_REQUEST['id'] = $thisclient->getTicketId();
 

@@ -101,10 +101,6 @@
                                     <li><?php echo $row['name'] ?></li>
                                     <li><?php echo $row['description'] ?></li>
                                 </ul>
-                                <!-- Use the label directly to act as a button -->
-                                <input type="radio" id="plan_<?php echo $row['id'] ?>" name="plan" class="radio-button" value="<?php echo $row['id'] ?>">
-
-
 
                                 <!-- PayPal payment form for displaying the buy button -->
                                 <form action="<?php echo PAYPAL_URL; ?>" method="post">
@@ -112,12 +108,16 @@
                                     <input type="hidden" name="business" value="<?php echo PAYPAL_ID; ?>">
 
                                     <!-- Specify a Buy Now button. -->
-                                    <input type="hidden" name="cmd" value="_xclick">
+                                    <input type="hidden" name="cmd" value="_xclick-subscriptions">
 
-                                    <!-- Specify details about the item that buyers will purchase. -->
+                                    <!-- Specify details about the subscription -->
                                     <input type="hidden" name="item_name" value="<?php echo $row['name']; ?>">
-                                    <input type="hidden" name="item_number" value="<?php echo $row['id']; ?>">
-                                    <input type="hidden" name="amount" value="<?php echo $row['price']; ?>">
+                                    <input type="hidden" name="item_number"  value="<?php echo $row['id']; ?>">
+                                    <input type="hidden" name="a3" value="<?php echo $row['price']; ?>">
+                                    <input type="hidden" name="p3" value="1">
+                                    <input type="hidden" name="t3" value="M">
+                                    <input type="hidden" name="src" value="1">
+
                                     <input type="hidden" name="currency_code" value="<?php echo PAYPAL_CURRENCY; ?>">
 
                                     <!-- Pass the user ID -->

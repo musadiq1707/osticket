@@ -8,7 +8,7 @@ include_once './include/config/dbConnect.php';
 // If transaction data is available in the URL
 if(!empty($_GET['item_number']) && !empty($_GET['tx']) && !empty($_GET['amt']) && !empty($_GET['cc']) && !empty($_GET['st'])) {
     // Get transaction information from URL
-    $user_id = $_GET['custom'];
+    $user_id = $_GET['cm'];
     $item_number = $_GET['item_number'];
     $txn_id = $_GET['tx'];
     $payment_gross = $_GET['amt'];
@@ -31,6 +31,31 @@ if(!empty($_GET['item_number']) && !empty($_GET['tx']) && !empty($_GET['amt']) &
         // Insert tansaction data into the database
         $insert = $db->query("INSERT INTO ost_payments(item_number,txn_id,payment_gross,currency_code,payment_status) VALUES('".$item_number."','".$txn_id."','".$payment_gross."','".$currency_code."','".$payment_status."')");
         $payment_id = $db->insert_id;
+    }
+
+    // IP address for which you want to get information
+    $ip = $_SERVER['REMOTE_ADDR'];
+
+    // API endpoint
+    $api_url = "https://ipinfo.io/{$ip}/json";
+
+    // Make the HTTP request
+    $response = file_get_contents($api_url);
+
+    // Check if the response is valid
+    if ($response !== false) {
+        // Parse JSON data into a PHP array
+        $ip_info = json_decode($response, true);
+
+        if ($ip_info !== null && isset($ip_info['ip'])) {
+            $ip_info_json = json_encode($ip_info);
+
+            $sqlQ = "UPDATE ost_user_account SET ip_info=? WHERE user_id=?";
+            $stmt = $db->prepare($sqlQ);
+
+            $stmt->bind_param("si", $ip_info_json, $user_id);
+            $update = $stmt->execute();
+        }
     }
 
     // Update subscription ID in users table

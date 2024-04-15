@@ -491,6 +491,8 @@ class ClientAccount extends UserAccount {
         $this->set('timezone', $vars['timezone']);
         // Change language
         $this->set('lang', $vars['lang'] ?: null);
+        // Date of Birth
+        $this->set('dob', $vars['dob'] ?: null);
         Internationalization::setCurrentLanguage(null);
         TextDomain::configureForUser($this);
 

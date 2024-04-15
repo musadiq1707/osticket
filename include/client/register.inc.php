@@ -30,6 +30,17 @@ $info = Format::htmlchars(($errors && $_POST)?$_POST:$info);
     $cf->render(array('staff' => false, 'mode' => 'create'));
 ?>
 <tr>
+    <td width="180">
+        <?php echo __('Date of Birth'); ?><br />
+
+        <?php
+            $currentDate = new DateTime();
+            $minDOB = $currentDate->sub(new DateInterval('P18Y'))->format('Y-m-d');
+        ?>
+        <input type="date" style="width: 172px" name="dob" id="dob" max="<?php echo $minDOB; ?>" value=""/>
+    </td>
+</tr>
+<tr>
     <td colspan="2">
         <div><hr><h3><?php echo __('Preferences'); ?></h3>
         </div>

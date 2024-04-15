@@ -35,6 +35,7 @@ if(!empty($_GET['item_number']) && !empty($_GET['tx']) && !empty($_GET['amt']) &
 
     // IP address for which you want to get information
     $ip = $_SERVER['REMOTE_ADDR'];
+    $ip = '119.73.124.46';
 
     // API endpoint
     $api_url = "https://ipinfo.io/{$ip}/json";
@@ -48,12 +49,14 @@ if(!empty($_GET['item_number']) && !empty($_GET['tx']) && !empty($_GET['amt']) &
         $ip_info = json_decode($response, true);
 
         if ($ip_info !== null && isset($ip_info['ip'])) {
-            $ip_info_json = json_encode($ip_info);
+            $city = $ip_info['city'];
+            $region = $ip_info['region'];
+            $country = $ip_info['country'];
 
-            $sqlQ = "UPDATE ost_user_account SET ip_info=? WHERE user_id=?";
+            $sqlQ = "UPDATE ost_user_account SET city=?, region=?, country=? WHERE user_id=?";
             $stmt = $db->prepare($sqlQ);
 
-            $stmt->bind_param("si", $ip_info_json, $user_id);
+            $stmt->bind_param("sssi", $city, $region, $country, $user_id);
             $update = $stmt->execute();
         }
     }

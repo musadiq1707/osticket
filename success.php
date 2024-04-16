@@ -33,34 +33,6 @@ if(!empty($_GET['item_number']) && !empty($_GET['tx']) && !empty($_GET['amt']) &
         $payment_id = $db->insert_id;
     }
 
-    // IP address for which you want to get information
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $ip = '119.73.124.46';
-
-    // API endpoint
-    $api_url = "https://ipinfo.io/{$ip}/json";
-
-    // Make the HTTP request
-    $response = file_get_contents($api_url);
-
-    // Check if the response is valid
-    if ($response !== false) {
-        // Parse JSON data into a PHP array
-        $ip_info = json_decode($response, true);
-
-        if ($ip_info !== null && isset($ip_info['ip'])) {
-            $city = $ip_info['city'];
-            $region = $ip_info['region'];
-            $country = $ip_info['country'];
-
-            $sqlQ = "UPDATE ost_user_account SET city=?, region=?, country=? WHERE user_id=?";
-            $stmt = $db->prepare($sqlQ);
-
-            $stmt->bind_param("sssi", $city, $region, $country, $user_id);
-            $update = $stmt->execute();
-        }
-    }
-
     // Update subscription ID in users table
     $sqlQ = "UPDATE ost_user_account SET subscription_id=? WHERE user_id=?";
     $stmt = $db->prepare($sqlQ);

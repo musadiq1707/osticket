@@ -491,8 +491,40 @@ class ClientAccount extends UserAccount {
         $this->set('timezone', $vars['timezone']);
         // Change language
         $this->set('lang', $vars['lang'] ?: null);
+        // Title
+        $this->set('title', $vars['title'] ?: null);
+        // Gender
+        $this->set('gender', $vars['gender'] ?: null);
         // Date of Birth
         $this->set('dob', $vars['dob'] ?: null);
+
+        // IP address for which you want to get information
+        $ip = $_SERVER['REMOTE_ADDR'];
+
+        // API endpoint
+        $api_url = "https://ipinfo.io/{$ip}/json";
+
+        // Make the HTTP request
+        $response = file_get_contents($api_url);
+
+        // Check if the response is valid
+        if ($response !== false) {
+            // Parse JSON data into a PHP array
+            $ip_info = json_decode($response, true);
+
+            if ($ip_info !== null && isset($ip_info['ip'])) {
+                // City
+                $this->set('city', $ip_info['city'] ?: null);
+
+                // Region
+                $this->set('region', $ip_info['region'] ?: null);
+
+                // Country
+                $this->set('country', $ip_info['country'] ?: null);
+            }
+        }
+
+
         Internationalization::setCurrentLanguage(null);
         TextDomain::configureForUser($this);
 

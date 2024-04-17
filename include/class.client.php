@@ -498,6 +498,18 @@ class ClientAccount extends UserAccount {
         // Date of Birth
         $this->set('dob', $vars['dob'] ?: null);
 
+        $full_name = $vars['6bf643de8f0e14'];
+        $name_parts = explode(" ", $full_name);
+
+        $last_name = array_pop($name_parts);
+        $first_name = implode(" ", $name_parts);
+
+        // First Name
+        $this->set('first_name', $first_name);
+
+        // Last Name
+        $this->set('last_name', $last_name);
+
         // IP address for which you want to get information
         $ip = $_SERVER['REMOTE_ADDR'];
 

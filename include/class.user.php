@@ -225,7 +225,7 @@ implements TemplateVariable, Searchable {
                 && $create
                 // Make sure at least email is valid
                 && Validator::is_email($vars['email'])) {
-            $name = $vars['name'];
+            $name = $vars['name'].' '.$vars['last_name'];
             if (is_array($name))
                 $name = implode(', ', $name);
             elseif (!$name)
@@ -235,6 +235,8 @@ implements TemplateVariable, Searchable {
                 'name' => Format::htmldecode(Format::sanitize($name, false)),
                 'created' => new SqlFunction('NOW'),
                 'updated' => new SqlFunction('NOW'),
+                'first_name' => $vars['name'],
+                'last_name' => $vars['last_name'],
                 //XXX: Do plain create once the cause
                 // of the detached emails is fixed.
                 'default_email' => UserEmail::ensure($vars['email'])

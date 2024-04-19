@@ -315,6 +315,14 @@ implements TemplateVariable, Searchable {
         return $this->name;
     }
 
+    function getFirstName() {
+        return $this->first_name;
+    }
+
+    function getLastName() {
+        return $this->last_name;
+    }
+
     function getPhoneNumber() {
         foreach ($this->getDynamicData() as $e)
             if ($a = $e->getAnswer('phone'))
@@ -471,7 +479,9 @@ implements TemplateVariable, Searchable {
 
                     foreach ($entry->getFields() as $f) {
                         if ($f->get('name') == 'name' && !$cb($f))
-                            $f->value = $this->getFullName();
+                            $f->value = $this->getFirstName();
+                        elseif ($f->get('name') == 'last_name' && !$cb($f))
+                            $f->value = $this->getLastName();
                         elseif ($f->get('name') == 'email' && !$cb($f))
                             $f->value = $this->getEmail();
                     }

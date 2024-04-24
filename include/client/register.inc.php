@@ -30,39 +30,6 @@ $info = Format::htmlchars(($errors && $_POST)?$_POST:$info);
     $cf->render(array('staff' => false, 'mode' => 'create'));
 ?>
 <tr>
-    <td width="180" style="padding-top: 10px">
-        <?php echo __('Title'); ?><br />
-        <select name="title" id="title">
-            <option value="">Please Select Title</option>
-            <option value="Mr">Mr</option>
-            <option value="Mrs">Mrs</option>
-            <option value="Ms">Ms</option>
-            <option value="Miss">Miss</option>
-        </select>
-    </td>
-</tr>
-<tr>
-    <td width="180" style="padding-top: 10px">
-        <?php echo __('Gender'); ?><br />
-        <select name="gender" id="gender">
-            <option value="">Please Select Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-        </select>
-    </td>
-</tr>
-<tr>
-    <td width="180" style="padding-top: 10px">
-        <?php echo __('Date of Birth'); ?><br />
-
-        <?php
-            $currentDate = new DateTime();
-            $minDOB = $currentDate->sub(new DateInterval('P18Y'))->format('Y-m-d');
-        ?>
-        <input type="date" style="width: 172px" name="dob" id="dob" max="<?php echo $minDOB; ?>" value=""/>
-    </td>
-</tr>
-<tr>
     <td colspan="2">
         <div><hr><h3><?php echo __('Preferences'); ?></h3>
         </div>

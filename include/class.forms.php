@@ -4471,12 +4471,40 @@ class TextboxWidget extends Widget {
         if ($type == 'text' && isset($types[$config['validator']]))
             $type = $types[$config['validator']];
         ?>
-        <input type="<?php echo $type; ?>"
-            id="<?php echo $this->id; ?>"
-            <?php echo $autofocus .' '.Format::array_implode('=', ' ',
-                    array_filter($attrs)); ?>
-            name="<?php echo $this->name; ?>"
-            value="<?php echo Format::htmlchars($this->value, true); ?>"/>
+        <?php if(!$config['dropdown'] && !$config['dob']) { ?>
+            <input type="<?php echo $type; ?>"
+                   id="<?php echo $this->id; ?>"
+                <?php echo $autofocus .' '.Format::array_implode('=', ' ',
+                        array_filter($attrs)); ?>
+                   name="<?php echo $this->name; ?>"
+                   value="<?php echo Format::htmlchars($this->value, true); ?>"/>
+        <?php } elseif($config['dropdown'] && $config['title']) { ?>
+            <select name="title" id="<?php echo $this->id; ?>" style="width: 340px">
+                <option value="">Please Select Title</option>
+                <option value="Mr">Mr</option>
+                <option value="Mrs">Mrs</option>
+                <option value="Ms">Ms</option>
+                <option value="Miss">Miss</option>
+            </select>
+        <?php } elseif($config['dropdown'] && $config['gender']) { ?>
+            <select name="gender" id="<?php echo $this->id; ?>" style="width: 340px">
+                <option value="">Please Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+        <?php } elseif($config['dob']) {
+            $currentDate = new DateTime();
+            $minDOB = $currentDate->sub(new DateInterval('P18Y'))->format('Y-m-d');
+
+            ?>
+            <input type="date"
+                   style="width: 337px"
+                   id="<?php echo $this->id; ?>"
+                <?php echo $autofocus .' '.Format::array_implode('=', ' ', array_filter($attrs)); ?>
+                   name="dob"
+                   max="<?php echo $minDOB; ?>"
+                   value="<?php echo Format::htmlchars($this->value, true); ?>"/>
+        <?php } ?>
         <?php
     }
 }
@@ -4591,7 +4619,7 @@ class PhoneNumberWidget extends Widget {
         $config = $this->field->getConfiguration();
         list($phone, $ext) = explode("X", $this->value);
         ?>
-        <input id="<?php echo $this->id; ?>" type="tel" name="<?php echo $this->name; ?>" value="<?php
+        <input id="<?php echo $this->id; ?>" type="tel" size="<?php echo $config['size']; ?>" name="<?php echo $this->name; ?>" value="<?php
         echo Format::htmlchars($phone); ?>"/><?php
         // Allow display of extension field even if disabled if the phone
         // number being edited has an extension

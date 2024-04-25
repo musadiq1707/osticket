@@ -4481,16 +4481,16 @@ class TextboxWidget extends Widget {
         <?php } elseif($config['dropdown'] && $config['title']) { ?>
             <select name="title" id="<?php echo $this->id; ?>" style="width: 340px">
                 <option value="">Please Select Title</option>
-                <option value="Mr">Mr</option>
-                <option value="Mrs">Mrs</option>
-                <option value="Ms">Ms</option>
-                <option value="Miss">Miss</option>
+                <option <?php if(Format::htmlchars($this->value, true) == 'Mr') { echo 'selected'; } ?> value="Mr">Mr</option>
+                <option <?php if(Format::htmlchars($this->value, true) == 'Mrs') { echo 'selected'; } ?> value="Mrs">Mrs</option>
+                <option <?php if(Format::htmlchars($this->value, true) == 'Ms') { echo 'selected'; } ?> value="Ms">Ms</option>
+                <option <?php if(Format::htmlchars($this->value, true) == 'Miss') { echo 'selected'; } ?> value="Miss">Miss</option>
             </select>
         <?php } elseif($config['dropdown'] && $config['gender']) { ?>
             <select name="gender" id="<?php echo $this->id; ?>" style="width: 340px">
                 <option value="">Please Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
+                <option <?php if(Format::htmlchars($this->value, true) == 'Male') { echo 'selected'; } ?> value="Male">Male</option>
+                <option <?php if(Format::htmlchars($this->value, true) == 'Female') { echo 'selected'; } ?> value="Female">Female</option>
             </select>
         <?php } elseif($config['dob']) {
             $currentDate = new DateTime();

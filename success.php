@@ -1,25 +1,19 @@
 <?php
-// Include configuration file
-include './include/config.php';
+    // Include configuration file
+    include './include/config.php';
 
-// Include database connection file
-include_once './include/config/dbConnect.php';
+    // Include database connection file
+    include_once './include/config/dbConnect.php';
 
-// If transaction data is available in the URL
-if(!empty($_GET['item_number']) && !empty($_GET['tx']) && !empty($_GET['amt']) && !empty($_GET['cc']) && !empty($_GET['st'])) {
-    // Get transaction information from URL
-    $user_id = $_GET['cm'];
-    $item_number = $_GET['item_number'];
-    $txn_id = $_GET['tx'];
-    $payment_gross = $_GET['amt'];
-    $currency_code = $_GET['cc'];
-    $payment_status = $_GET['st'];
-    $payment_status = 'Completed';
+    // If transaction data is available in the URL
+    if(!empty($_GET['item_number']) && !empty($_GET['tx']) && !empty($_GET['amt']) && !empty($_GET['cc']) && !empty($_GET['st'])) {
+        // Get transaction information from URL
+        $user_id = $_GET['cm'];
 
-    // Get plans info from the database
-    $plans = get_table_data('ost_plans', 'id ="' . $item_number . '"');
-}
-?>
+        // Get ost_paypal_sub info from the database
+        $payment = get_table_data('ost_paypal_sub', 'user_id="' . $user_id . '"');
+    }
+    ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,22 +43,17 @@ if(!empty($_GET['item_number']) && !empty($_GET['tx']) && !empty($_GET['amt']) &
                 <div class="card-body">
                     <h1 class="card-title success">Your Payment has been Successful</h1>
 
-                    <h4>Payment Information</h4>
-                    <p><b>Reference Number:</b> <?php echo $payment_id; ?></p>
-                    <p><b>Transaction ID:</b> <?php echo $txn_id; ?></p>
-                    <p><b>Paid Amount:</b> $<?php echo $payment_gross; ?></p>
-                    <p><b>Payment Status:</b> <?php echo $payment_status; ?></p>
+                    <?php foreach ($payment as $row)  { ?>
+                        <h4>Payment Information</h4>
+                        <p><b>Reference Number:</b> <?php echo $row->payer_id; ?></p>
+                        <p><b>Subscription ID:</b> <?php echo $row->subscr_id; ?></p>
+                        <p><b>Paid Amount:</b> $<?php echo $row->mc_amount1; ?></p>
+                        <p><b>Status:</b> <?php echo ucfirst($row->payer_status); ?></p>
 
-                    <h4>Product Information</h4>
-                    <?php
-                    foreach ($plans as $key => $row) {
-                        ?>
-                        <p><b>Name:</b> <?php echo $row->name; ?></p>
-                        <p><b>Price:</b> $<?php echo $row->price; ?></p>
-                        <p><b>Interval:</b> Per <?php echo $row->interval; ?></p>
-                        <?php
-                    }
-                    ?>
+                        <h4>Product Information</h4>
+                        <p><b>Name:</b> <?php echo $row->item_name; ?></p>
+                        <p><b>Price:</b> $<?php echo $row->amount1; ?></p>
+                    <?php } ?>
                 </div>
                 <div class="card-footer text-center">
                     <a href="index.php" class="btn btn-primary">Back to Home</a>
@@ -79,3 +68,4 @@ if(!empty($_GET['item_number']) && !empty($_GET['tx']) && !empty($_GET['amt']) &
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
+

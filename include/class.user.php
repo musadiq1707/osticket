@@ -1,19 +1,19 @@
 <?php
 /*********************************************************************
-    class.user.php
+class.user.php
 
-    External end-user identification for osTicket
+External end-user identification for osTicket
 
-    Peter Rotich <peter@osticket.com>
-    Jared Hancock <jared@osticket.com>
-    Copyright (c)  2006-2013 osTicket
-    http://www.osticket.com
+Peter Rotich <peter@osticket.com>
+Jared Hancock <jared@osticket.com>
+Copyright (c)  2006-2013 osTicket
+http://www.osticket.com
 
-    Released under the GNU General Public License WITHOUT ANY WARRANTY.
-    See LICENSE.TXT for details.
+Released under the GNU General Public License WITHOUT ANY WARRANTY.
+See LICENSE.TXT for details.
 
-    vim: expandtab sw=4 ts=4 sts=4:
-**********************************************************************/
+vim: expandtab sw=4 ts=4 sts=4:
+ **********************************************************************/
 require_once INCLUDE_DIR . 'class.orm.php';
 require_once INCLUDE_DIR . 'class.util.php';
 require_once INCLUDE_DIR . 'class.variable.php';
@@ -141,7 +141,7 @@ class UserModel extends VerySimpleModel {
     }
 
     function getOrgId() {
-         return $this->get('org_id');
+        return $this->get('org_id');
     }
 
     function getOrganization() {
@@ -208,7 +208,7 @@ class UserCdata extends VerySimpleModel {
 }
 
 class User extends UserModel
-implements TemplateVariable, Searchable {
+    implements TemplateVariable, Searchable {
 
     var $_email;
     var $_entries;
@@ -221,10 +221,10 @@ implements TemplateVariable, Searchable {
         // Try and lookup by email address
         $user = static::lookupByEmail($vars['email']);
         if (!$user
-                // can create user?
-                && $create
-                // Make sure at least email is valid
-                && Validator::is_email($vars['email'])) {
+            // can create user?
+            && $create
+            // Make sure at least email is valid
+            && Validator::is_email($vars['email'])) {
             $name = $vars['name'].' '.$vars['last_name'];
             if (is_array($name))
                 $name = implode(', ', $name);
@@ -237,6 +237,7 @@ implements TemplateVariable, Searchable {
                 'updated' => new SqlFunction('NOW'),
                 'first_name' => $vars['name'],
                 'last_name' => $vars['last_name'],
+                'phone' => $vars['phone'],
                 //XXX: Do plain create once the cause
                 // of the detached emails is fixed.
                 'default_email' => UserEmail::ensure($vars['email'])
@@ -283,8 +284,8 @@ implements TemplateVariable, Searchable {
 
         //Make sure the email is not in-use
         if (($field=$form->getField('email'))
-                && $field->getClean()
-                && User::lookup(array('emails__address'=>$field->getClean()))) {
+            && $field->getClean()
+            && User::lookup(array('emails__address'=>$field->getClean()))) {
             $field->addError(__('Email is assigned to another user'));
             $valid = false;
         }
@@ -296,8 +297,8 @@ implements TemplateVariable, Searchable {
 
         if (!isset($this->_email))
             $this->_email = new EmailAddress(sprintf('"%s" <%s>',
-                    addcslashes($this->getName(), '"'),
-                    $this->default_email->address));
+                addcslashes($this->getName(), '"'),
+                $this->default_email->address));
 
         return $this->_email;
     }
@@ -321,6 +322,40 @@ implements TemplateVariable, Searchable {
 
     function getLastName() {
         return $this->last_name;
+    }
+
+    function getPhone() {
+        return $this->phone;
+    }
+
+    function getTitle() {
+        $title = '';
+        if ($acct = $this->getAccount()) {
+            $info = $acct->getInfo();
+            $title = $info['title'];
+        }
+
+        return $title;
+    }
+
+    function getGender() {
+        $gender = '';
+        if ($acct = $this->getAccount()) {
+            $info = $acct->getInfo();
+            $gender = $info['gender'];
+        }
+
+        return $gender;
+    }
+
+    function getDOB() {
+        $dob = '';
+        if ($acct = $this->getAccount()) {
+            $info = $acct->getInfo();
+            $dob = $info['dob'];
+        }
+
+        return $dob;
     }
 
     function getPhoneNumber() {
@@ -370,10 +405,10 @@ implements TemplateVariable, Searchable {
     function to_json() {
 
         $info = array(
-                'id'  => $this->getId(),
-                'name' => Format::htmlchars($this->getName()),
-                'email' => (string) $this->getEmail(),
-                'phone' => (string) $this->getPhoneNumber());
+            'id'  => $this->getId(),
+            'name' => Format::htmlchars($this->getName()),
+            'email' => (string) $this->getEmail(),
+            'phone' => (string) $this->getPhoneNumber());
 
         return Format::json_encode($info);
     }
@@ -475,7 +510,7 @@ implements TemplateVariable, Searchable {
             foreach ($this->getDynamicData() as $entry) {
                 $entry->addMissingFields();
                 if(($form = $entry->getDynamicForm())
-                        && $form->get('type') == 'U' ) {
+                    && $form->get('type') == 'U' ) {
 
                     foreach ($entry->getFields() as $f) {
                         if ($f->get('name') == 'name' && !$cb($f))
@@ -484,6 +519,14 @@ implements TemplateVariable, Searchable {
                             $f->value = $this->getLastName();
                         elseif ($f->get('name') == 'email' && !$cb($f))
                             $f->value = $this->getEmail();
+                        elseif ($f->get('name') == 'phone' && !$cb($f))
+                            $f->value = $this->getPhone();
+                        elseif ($f->get('name') == 'title' && !$cb($f))
+                            $f->value = $this->getTitle();
+                        elseif ($f->get('name') == 'gender' && !$cb($f))
+                            $f->value = $this->getGender();
+                        elseif ($f->get('name') == 'dob' && !$cb($f))
+                            $f->value = $this->getDOB();
                     }
                 }
 
@@ -505,7 +548,7 @@ implements TemplateVariable, Searchable {
     function canSeeOrgTickets() {
         return $this->org && (
                 $this->org->shareWithEverybody()
-            || ($this->isPrimaryContact() && $this->org->shareWithPrimaryContacts()));
+                || ($this->isPrimaryContact() && $this->org->shareWithPrimaryContacts()));
     }
 
     function register($vars, &$errors) {
@@ -552,7 +595,7 @@ implements TemplateVariable, Searchable {
     function updateInfo($vars, &$errors, $staff=false) {
         $isEditable = function ($f) use($staff) {
             return ($staff ? $f->isEditableToStaff() :
-                    $f->isEditableToUsers());
+                $f->isEditableToUsers());
         };
         $valid = true;
         $forms = $this->getForms($vars, $isEditable);
@@ -563,11 +606,11 @@ implements TemplateVariable, Searchable {
             elseif (!$staff && !$entry->isValidForClient(true))
                 $valid = false;
             elseif ($entry->getDynamicForm()->get('type') == 'U'
-                    && ($f=$entry->getField('email'))
-                    && $isEditable($f)
-                    && $f->getClean()
-                    && ($u=User::lookup(array('emails__address'=>$f->getClean())))
-                    && $u->id != $this->getId()) {
+                && ($f=$entry->getField('email'))
+                && $isEditable($f)
+                && $f->getClean()
+                && ($u=User::lookup(array('emails__address'=>$f->getClean())))
+                && $u->id != $this->getId()) {
                 $valid = false;
                 $f->addError(__('Email is assigned to another user'));
             }
@@ -592,27 +635,53 @@ implements TemplateVariable, Searchable {
             }
 
             if ($entry->getDynamicForm()->get('type') == 'U') {
-                //  Name field
+                //  First Name field
                 if (($name = $entry->getField('name')) && $isEditable($name) ) {
                     $name = $name->getClean();
                     if (is_array($name))
                         $name = implode(', ', $name);
-                    if ($this->name != $name) {
-                        $type = array('type' => 'edited', 'key' => 'Name');
+                    if ($this->first_name != $name) {
+                        $type = array('type' => 'edited', 'key' => 'First Name');
                         Signal::send('object.edited', $this, $type);
                     }
-                    $this->name = $name;
+                    $this->first_name = $name;
+                }
+
+                //  Last Name field
+                if (($last_name = $entry->getField('last_name')) && $isEditable($last_name) ) {
+                    $last_name = $last_name->getClean();
+                    if (is_array($last_name))
+                        $last_name = implode(', ', $last_name);
+                    if ($this->last_name != $last_name) {
+                        $type = array('type' => 'edited', 'key' => 'Last Name');
+                        Signal::send('object.edited', $this, $type);
+                    }
+                    $this->last_name = $last_name;
+
+                    $this->name = $this->first_name.' '.$this->last_name;
                 }
 
                 // Email address field
                 if (($email = $entry->getField('email'))
-                        && $isEditable($email)) {
+                    && $isEditable($email)) {
                     if ($this->default_email->address != $email->getClean()) {
                         $type = array('type' => 'edited', 'key' => 'Email');
                         Signal::send('object.edited', $this, $type);
                     }
                     $this->default_email->address = $email->getClean();
                     $this->default_email->save();
+                }
+
+                //  Phone field
+                if (($phone = $entry->getField('phone')) && $isEditable($phone) ) {
+                    $phone = $phone->getClean();
+                    if (is_array($phone))
+                        $phone = implode(', ', $phone);
+                    if ($this->phone != $phone) {
+                        $type = array('type' => 'edited', 'key' => 'Phone');
+                        Signal::send('object.edited', $this, $type);
+                    }
+                    $this->phone = $phone;
                 }
             }
 
@@ -737,7 +806,7 @@ implements TemplateVariable, Searchable {
 }
 
 class EmailAddress
-implements TemplateVariable {
+    implements TemplateVariable {
     var $email;
     var $address;
     protected $_info;
@@ -745,15 +814,15 @@ implements TemplateVariable {
     function __construct($address) {
         $this->_info = self::parse($address);
         $this->email = sprintf('%s@%s',
-                $this->getMailbox(),
-                $this->getDomain());
+            $this->getMailbox(),
+            $this->getDomain());
 
         if ($this->getName())
             $this->address = sprintf('"%s" <%s>',
-                    $this->getName(),
-                    $this->email);
+                $this->getName(),
+                $this->email);
         else
-             $this->address =  $this->email;
+            $this->address =  $this->email;
     }
 
     function __toString() {
@@ -766,13 +835,13 @@ implements TemplateVariable {
             return '';
 
         switch ($what) {
-        case 'host':
-        case 'domain':
-            return $this->_info->host;
-        case 'personal':
-            return trim($this->_info->personal, '"');
-        case 'mailbox':
-            return $this->_info->mailbox;
+            case 'host':
+            case 'domain':
+                return $this->_info->host;
+            case 'personal':
+                return trim($this->_info->personal, '"');
+            case 'mailbox':
+                return $this->_info->mailbox;
         }
     }
 
@@ -805,7 +874,7 @@ implements TemplateVariable {
     static function parse($address) {
         require_once PEAR_DIR . 'PEAR.php';
         if (($parts = Mail_Parse::parseAddressList($address))
-                && !PEAR::isError($parts))
+            && !PEAR::isError($parts))
             return current($parts);
     }
 
@@ -819,7 +888,7 @@ implements TemplateVariable {
 }
 
 class PersonsName
-implements TemplateVariable {
+    implements TemplateVariable {
     var $format;
     var $parts;
     var $name;
@@ -948,13 +1017,13 @@ implements TemplateVariable {
     }
 
     function getNameFormats($user, $type) {
-      $nameFormats = array();
+        $nameFormats = array();
 
-      foreach (PersonsName::allFormats() as $format => $func) {
-          $nameFormats[$type . '.name.' . $format] = $user->getName()->$func[1]();
-      }
+        foreach (PersonsName::allFormats() as $format => $func) {
+            $nameFormats[$type . '.name.' . $format] = $user->getName()->$func[1]();
+        }
 
-      return $nameFormats;
+        return $nameFormats;
     }
 
     function asVar() {
@@ -1104,7 +1173,7 @@ class UserAccount extends VerySimpleModel {
     function statusChanged($flag, $var) {
         if (($this->hasStatus($flag) && !$var) ||
             (!$this->hasStatus($flag) && $var))
-                return true;
+            return true;
     }
 
     protected function hasStatus($flag) {
@@ -1352,17 +1421,17 @@ class UserAccount extends VerySimpleModel {
 
         // Set flags
         foreach (array(
-                'pwreset-flag' => UserAccountStatus::REQUIRE_PASSWD_RESET,
-                'locked-flag' => UserAccountStatus::LOCKED,
-                'forbid-pwchange-flag' => UserAccountStatus::FORBID_PASSWD_RESET
-        ) as $ck=>$flag) {
+                     'pwreset-flag' => UserAccountStatus::REQUIRE_PASSWD_RESET,
+                     'locked-flag' => UserAccountStatus::LOCKED,
+                     'forbid-pwchange-flag' => UserAccountStatus::FORBID_PASSWD_RESET
+                 ) as $ck=>$flag) {
             if ($vars[$ck])
                 $this->setStatus($flag);
             else {
                 if (($pwreset && $ck == 'pwreset-flag') || ($locked && $ck == 'locked-flag') ||
                     ($forbidPwChange && $ck == 'forbid-pwchange-flag')) {
-                        $type = array('type' => 'edited', 'key' => $ck);
-                        Signal::send('object.edited', $this, $type);
+                    $type = array('type' => 'edited', 'key' => $ck);
+                    Signal::send('object.edited', $this, $type);
                 }
                 $this->clearStatus($flag);
             }
@@ -1396,7 +1465,7 @@ class UserAccount extends VerySimpleModel {
 
         //Require temp password.
         if ((!$vars['backend'] || $vars['backend'] != 'client')
-                && !isset($vars['sendemail'])) {
+            && !isset($vars['sendemail'])) {
             if (!$vars['passwd1'])
                 $errors['passwd1'] = 'Temporary password required';
             elseif ($vars['passwd1'] && strcmp($vars['passwd1'], $vars['passwd2']))
@@ -1492,7 +1561,7 @@ class UserAccountStatus {
  */
 class UserList extends MailingList {
 
-   function add($user) {
+    function add($user) {
         if (!$user instanceof ITicketUser)
             throw new InvalidArgumentException('User expected');
 

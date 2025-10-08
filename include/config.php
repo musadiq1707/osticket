@@ -4,7 +4,7 @@
  */
 
 // PayPal configuration
-define('PAYPAL_ID', 'sb-hp8vd20320632@business.example.com');
+define('PAYPAL_ID', '');
 define('PAYPAL_SANDBOX', TRUE); //TRUE=Sandbox | FALSE=Production
 
 define('PAYPAL_RETURN_URL', 'http://osticket.test/success.php');

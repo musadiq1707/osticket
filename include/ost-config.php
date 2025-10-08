@@ -30,10 +30,10 @@ if(OSTINSTALLED!=TRUE){
 }
 
 # Encrypt/Decrypt secret key - randomly generated during installation.
-define('SECRET_SALT','UH38mQD79cj1fhv4PHsOGt0nfCWfTsYp');
+define('SECRET_SALT','');
 
 #Default admin email. Used only on db connection issues and related alerts.
-define('ADMIN_EMAIL','musadiq.dawood@yopmail.com');
+define('ADMIN_EMAIL','');
 
 # Database Options
 # ====================================================
